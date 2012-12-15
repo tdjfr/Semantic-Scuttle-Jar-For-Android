@@ -48,15 +48,12 @@ public class ScuttleAddBookmark extends Activity {
 			String desc = args[1];
 			String tags = args[2];
 			String status = args[3];
-			String scuttleUrl = args[4];
-			String scuttleUsername = args[5];
-			String scuttlePassword = args[6];
 			try {
-		        url = scuttleUrl+"api/posts_add.php?url="+URLEncoder.encode(url, "UTF-8")+
+		        String apiURL = "api/posts_add.php?url="+URLEncoder.encode(url, "UTF-8")+
 		        	"&description="+URLEncoder.encode(desc, "UTF-8")+
 		        	"&tags="+URLEncoder.encode(tags, "UTF-8")+
 		        	"&status="+URLEncoder.encode(status, "UTF-8");
-		        InputStream is = ScuttleBookmarkList.callScuttleURL(url, scuttleUsername, scuttlePassword);
+		        InputStream is = APICall.callScuttleURL(apiURL, ScuttleAddBookmark.this);
 			} catch( SocketTimeoutException ste ) {
 				this.errorMsg = "Username and/or password is incorrect.";
 				return(false);
@@ -79,13 +76,6 @@ public class ScuttleAddBookmark extends Activity {
 		this.scuttleURL = prefs.getString("url", "");
 		this.scuttleUsername = prefs.getString("username", "");
 		this.scuttlePassword = prefs.getString("password", "");
-		// Make sure the last character of the URL is a slash.
-		if( this.scuttleURL.length() > 0 ) {
-			String last = this.scuttleURL.substring(this.scuttleURL.length()-1);
-			if( !last.equals("/") ) {
-				this.scuttleURL += "/";
-			}
-		}
 	}
     /** Called when the activity is first created. */
     @Override
@@ -115,7 +105,7 @@ public class ScuttleAddBookmark extends Activity {
                 String strUrl = ((EditText)findViewById(R.id.addbookmark_url)).getText().toString();
                 String strDesc = ((EditText)findViewById(R.id.addbookmark_description)).getText().toString();
                 String strStatus = ((String)((Spinner)findViewById(R.id.addbookmark_status)).getSelectedItem());
-        		(new SaveBookmark()).execute(strUrl, strDesc, strTags, strStatus, scuttleURL, scuttleUsername, scuttlePassword);
+        		(new SaveBookmark()).execute(strUrl, strDesc, strTags, strStatus);
         		finish();
         	}
         });

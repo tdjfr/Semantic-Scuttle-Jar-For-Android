@@ -42,28 +42,7 @@ public class ScuttleBookmarkList extends ListActivity {
 	private String scuttlePassword;
 	private String scuttleURL;
 	private String filterTag;
-
-	static InputStream callScuttleURL(String url, String user, String pass) throws IOException {
-        Authenticator.setDefault(new ScuttleAuthenticator(user, pass));
-        HttpURLConnection c = (HttpURLConnection)(new URL(url).openConnection());
-        c.setUseCaches(false);
-        c.setConnectTimeout(1500);
-        c.setReadTimeout(300);
-        c.connect();
-        InputStream is = c.getInputStream();
-        return(is);
-	}
-	static class ScuttleAuthenticator extends Authenticator {
-		private String username, password;
-		
-		public ScuttleAuthenticator(String user, String pass) {
-			this.username = user;
-			this.password = pass;
-		}
-		protected PasswordAuthentication getPasswordAuthentication() {
-			return( new PasswordAuthentication(this.username, this.password.toCharArray()) );
-		}
-	}
+	
 	private class RetrieveTags extends AsyncTask<String, Void, List<HashMap<String, String>>> {
 		private AlertDialog alertLoading;
 		private String errorMsg = "";
@@ -84,12 +63,8 @@ public class ScuttleBookmarkList extends ListActivity {
 			}
 		}
 		protected List<HashMap<String, String>> doInBackground(String... args) {
-			String url = args[0];
-			String user = args[1];
-			String pass = args[2];
 			try {
-		        url = url+"api/tags_get.php";
-		        InputStream is = ScuttleBookmarkList.callScuttleURL(url, user, pass);
+		        InputStream is = APICall.callScuttleURL("api/tags_get.php", ScuttleBookmarkList.this);
 		        ScuttleTagXMLHandler handler = new ScuttleTagXMLHandler();
 		        Xml.parse(is, Xml.Encoding.ISO_8859_1, handler);
 		        return(handler.getTags());
@@ -128,17 +103,14 @@ public class ScuttleBookmarkList extends ListActivity {
 			}
 		}
 		protected List<HashMap<String, String>> doInBackground(String... args) {
-			String url = args[0];
-			String user = args[1];
-			String pass = args[2];
 			try {
-		        url = url+"api/posts_all.php";
+		        String url = "api/posts_all.php";
 		        // If a valid tag has been specified by the user then we only 
 		        // get bookmarks with that tag.
 		        if( filterTag != null && !filterTag.equals("") && !filterTag.equals(getResources().getString(R.string.tagslist_notags)) ) {
 		        	url += "?tag="+filterTag;
 		        }
-		        InputStream is = ScuttleBookmarkList.callScuttleURL(url, user, pass);
+		        InputStream is = APICall.callScuttleURL(url, ScuttleBookmarkList.this);
 		        ScuttleBookmarkXMLHandler handler = new ScuttleBookmarkXMLHandler();
 		        Xml.parse(is, Xml.Encoding.ISO_8859_1, handler);
 		        return(handler.getBookmarks());
@@ -163,19 +135,12 @@ public class ScuttleBookmarkList extends ListActivity {
 		this.scuttleURL = prefs.getString("url", "");
 		this.scuttleUsername = prefs.getString("username", "");
 		this.scuttlePassword = prefs.getString("password", "");
-		// Make sure the last character of the URL is a slash.
-		if( this.scuttleURL.length() > 0 ) {
-			String last = this.scuttleURL.substring(this.scuttleURL.length()-1);
-			if( !last.equals("/") ) {
-				this.scuttleURL += "/";
-			}
-		}
 	}
 	private void loadBookmarks() {
-		(new RetrieveBookmarks()).execute(this.scuttleURL, this.scuttleUsername, this.scuttlePassword);
+		(new RetrieveBookmarks()).execute();
 	}
 	private void loadTags() {
-		(new RetrieveTags()).execute(this.scuttleURL, this.scuttleUsername, this.scuttlePassword);
+		(new RetrieveTags()).execute();
 	}
 	private void displayTagChooser(List<HashMap<String, String>> tags) {
 		// Create the dialog.
