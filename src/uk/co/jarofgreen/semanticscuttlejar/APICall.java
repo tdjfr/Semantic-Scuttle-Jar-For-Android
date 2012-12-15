@@ -6,6 +6,9 @@ import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,11 +39,26 @@ public class APICall  {
 		
 		String scuttlePassword = prefs.getString("password", "");
 		
+		String acceptAllSSLCerts = prefs.getString("acceptAllSSLCerts", "no");
+		
         Authenticator.setDefault(new ScuttleAuthenticator(scuttleUsername, scuttlePassword));
         HttpURLConnection c = (HttpURLConnection)(new URL(scuttleURL+url).openConnection());
         c.setUseCaches(false);
         c.setConnectTimeout(1500);
         c.setReadTimeout(300);
+        
+        
+        if (acceptAllSSLCerts.compareTo("yes") == 0) {
+	        try {
+	        	TrustModifier.relaxHostChecking(c);
+	        } catch (KeyStoreException e) {
+	        	// 
+	        } catch (KeyManagementException e) {
+	        	//
+	        } catch (NoSuchAlgorithmException e) {
+	        	//
+	        }
+        }
         c.connect();
         InputStream is = c.getInputStream();
         return(is);

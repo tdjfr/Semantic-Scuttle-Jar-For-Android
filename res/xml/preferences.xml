@@ -13,4 +13,12 @@
 		android:title="Scuttle Password"
 		android:summary="The password you use to login to Scuttle"
 		android:password="true"/>
+	<ListPreference
+	    android:defaultValue="no"
+	    android:entries="@array/pref_accept_all_SSL_certs_labels"
+	    android:entryValues="@array/pref_accept_all_SSL_certs_values"
+	    android:key="acceptAllSSLCerts"
+	    android:summary="Do you use a self-signed cert? WARNING: Makes you vulnerable to man in the middle attacks!"
+	    android:title="Accept all SSL Certs" />
+	
 </PreferenceScreen>

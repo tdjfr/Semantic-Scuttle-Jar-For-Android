@@ -27,4 +27,12 @@
 	</string-array>
 
 	<string name="tagslist_notags">No Tag (show all bookmarks)</string>
+	
+    <string-array name="pref_accept_all_SSL_certs_values">
+        <item>no</item><item>yes</item>
+    </string-array>
+    <string-array name="pref_accept_all_SSL_certs_labels">
+        <item>No</item><item>Yes</item>
+    </string-array>
+        
 </resources>
