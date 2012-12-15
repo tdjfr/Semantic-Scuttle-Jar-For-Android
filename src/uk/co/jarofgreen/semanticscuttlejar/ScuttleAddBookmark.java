@@ -1,10 +1,12 @@
-package com.shadybrooksoftware.scuttle;
+package uk.co.jarofgreen.semanticscuttlejar;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
+
+import uk.co.jarofgreen.semanticscuttlejar.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

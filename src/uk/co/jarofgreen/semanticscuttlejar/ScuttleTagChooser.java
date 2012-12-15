@@ -1,4 +1,4 @@
-package com.shadybrooksoftware.scuttle;
+package uk.co.jarofgreen.semanticscuttlejar;
 
 import android.app.Dialog;
 import android.content.Context;

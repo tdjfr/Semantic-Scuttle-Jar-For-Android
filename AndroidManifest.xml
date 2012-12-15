@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.shadybrooksoftware.scuttle"
-      android:versionName="2.0.0" android:versionCode="100">
+      package="uk.co.jarofgreen.semanticscuttlejar"
+      android:versionName="1.0" android:versionCode="1">
     <application android:label="@string/app_name" android:icon="@drawable/icon">
         <activity android:name=".ScuttleBookmarkList"
                   android:label="@string/app_name">
@@ -13,7 +13,7 @@
 
 	    <activity android:name="ScuttlePreferences" android:label="@string/preferences_label"></activity>
 	
-		<activity android:name=".ScuttleAddBookmark" android:label="@string/addbookmark_label">
+		<activity android:name="uk.co.jarofgreen.semanticscuttlejar.ScuttleAddBookmark" android:label="@string/addbookmark_label">
 			<intent-filter>
 				<action android:name="android.intent.action.SEND"/>
 				<category android:name="android.intent.category.DEFAULT"/>

@@ -1,4 +1,4 @@
-package com.shadybrooksoftware.scuttle;
+package uk.co.jarofgreen.semanticscuttlejar;
 
 public class ScuttleTag implements Comparable<ScuttleTag> {
 	public String tag = "";

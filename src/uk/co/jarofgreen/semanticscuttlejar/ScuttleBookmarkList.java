@@ -1,4 +1,4 @@
-package com.shadybrooksoftware.scuttle;
+package uk.co.jarofgreen.semanticscuttlejar;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+
+import uk.co.jarofgreen.semanticscuttlejar.R;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

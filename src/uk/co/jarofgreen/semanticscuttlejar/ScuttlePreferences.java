@@ -1,4 +1,6 @@
-package com.shadybrooksoftware.scuttle;
+package uk.co.jarofgreen.semanticscuttlejar;
+
+import uk.co.jarofgreen.semanticscuttlejar.R;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

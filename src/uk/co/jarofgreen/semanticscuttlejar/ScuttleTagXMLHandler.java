@@ -1,4 +1,4 @@
-package com.shadybrooksoftware.scuttle;
+package uk.co.jarofgreen.semanticscuttlejar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
