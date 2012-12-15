@@ -91,11 +91,13 @@ public class ScuttleAddBookmark extends Activity {
 
         // Get the extras data passed in with the intent.
         Bundle b = this.getIntent().getExtras();
-        // Set the text fields to the values of the passed in data.
-        EditText txtUrl = (EditText)findViewById(R.id.addbookmark_url);
-        txtUrl.setText(b.getCharSequence(Intent.EXTRA_TEXT));
-        EditText txtDesc = (EditText)findViewById(R.id.addbookmark_description);
-        txtDesc.setText(b.getString(Intent.EXTRA_SUBJECT));
+        if (b != null) {
+	        // Set the text fields to the values of the passed in data.
+	        EditText txtUrl = (EditText)findViewById(R.id.addbookmark_url);
+	        txtUrl.setText(b.getCharSequence(Intent.EXTRA_TEXT));
+	        EditText txtDesc = (EditText)findViewById(R.id.addbookmark_description);
+	        txtDesc.setText(b.getString(Intent.EXTRA_SUBJECT));
+        }
         // Handle when the user presses the save button.
         Button btnSave = (Button)findViewById(R.id.addbookmark_btnsave);
         btnSave.setOnClickListener(new OnClickListener() {

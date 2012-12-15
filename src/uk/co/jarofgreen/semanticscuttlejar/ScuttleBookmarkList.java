@@ -220,6 +220,9 @@ public class ScuttleBookmarkList extends ListActivity {
     	case R.id.listmenu_preferences:
     		startActivity(new Intent(this, ScuttlePreferences.class));
     		return(true);
+    	case R.id.listmenu_add:
+    		startActivity(new Intent(this, ScuttleAddBookmark.class));
+    		return(true);    		
     	case R.id.listmenu_refresh:
     		this.getPrefs();
     		this.loadBookmarks();

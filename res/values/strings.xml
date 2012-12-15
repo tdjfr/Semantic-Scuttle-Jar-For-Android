@@ -6,6 +6,7 @@
     <string name="list_menu_refresh">Refresh</string>
     <string name="list_menu_tags">Tags</string>
     <string name="list_menu_search">Search</string>
+    <string name="list_menu_add">Add</string>
 
     <string name="preferences_label">Scuttle Preferences</string>
     <string name="preference_url">url</string>

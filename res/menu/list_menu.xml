@@ -12,4 +12,7 @@
     	android:id="@+id/listmenu_tags"
     	android:icon="@drawable/tag"
     	android:title="@string/list_menu_tags"/>
+    <item 
+    	android:id="@+id/listmenu_add"
+    	android:title="@string/list_menu_add"/>    
 </menu>
