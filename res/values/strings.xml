@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Scuttle for Android</string>
+    <string name="app_name">Semantic Scuttle Jar</string>
     
     <string name="list_menu_preferences">Settings</string>
     <string name="list_menu_refresh">Refresh</string>
@@ -12,7 +12,7 @@
     <string name="preference_username">username</string>
     <string name="preference_password">password</string>
 
-	<string name="addbookmark_label">Scuttle - Add Bookmark</string>
+	<string name="addbookmark_label">Semantic Scuttle Jar - Add Bookmark</string>
 	<string name="addbookmark_url_label">URL:</string>
 	<string name="addbookmark_description_label">Description:</string>
 	<string name="addbookmark_tags_label">Tags:</string>
