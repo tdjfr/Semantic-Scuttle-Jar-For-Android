@@ -9,10 +9,20 @@
     <string name="list_menu_add">Add</string>
 
     <string name="preferences_label">Scuttle Preferences</string>
-    <string name="preference_url">url</string>
-    <string name="preference_username">username</string>
-    <string name="preference_password">password</string>
+    
+    <string name="preference_url_title">Semantic Scuttle URL</string>
+    <string name="preference_url_summary">The base URL to access Semantic Scuttle</string>
+    
+    <string name="preference_username_title">Semantic Scuttle Username</string>
+    <string name="preference_username_summary">The username you use to login to Semantic Scuttle</string>
+    
+    <string name="preference_password_title">Semantic Scuttle Password</string>
+    <string name="preference_password_summary">The password you use to login to Semantic Scuttle</string>
 
+    <string name="preference_acceptAllSSLCerts_title">Accept all SSL Certs</string>
+    <string name="preference_acceptAllSSLCerts_summary">Do you use a self-signed cert? WARNING: Makes you vulnerable to man in the middle attacks!</string>
+    
+    
 	<string name="addbookmark_label">Semantic Scuttle Jar - Add Bookmark</string>
 	<string name="addbookmark_url_label">URL:</string>
 	<string name="addbookmark_description_label">Description:</string>
