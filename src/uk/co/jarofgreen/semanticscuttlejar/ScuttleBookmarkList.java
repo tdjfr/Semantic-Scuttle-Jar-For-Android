@@ -17,6 +17,7 @@ import uk.co.jarofgreen.semanticscuttlejar.R;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -187,9 +188,35 @@ public class ScuttleBookmarkList extends ListActivity {
         ListView lv = getListView();
         lv.setOnItemClickListener(new OnItemClickListener() {
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        		String url = ((TextView)view.findViewById(R.id.bookmark_url)).getText().toString();
-        		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        		startActivity(i);
+        		AlertDialog.Builder builder = new AlertDialog.Builder(ScuttleBookmarkList.this);
+        		String[] options = {getString(R.string.open), getString(R.string.share)};
+        		final class BookmarkClick implements DialogInterface.OnClickListener {
+        			
+        			View view;
+        			
+        			public void onClick(DialogInterface dialog, int which) {
+        				String url = ((TextView)view.findViewById(R.id.bookmark_url)).getText().toString();
+        	    		String description = ((TextView)view.findViewById(R.id.bookmark_description)).getText().toString();
+        				if (which == 0) {
+	        	    		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+	        	    		startActivity(i);
+	        	    	}
+	        	    	if (which == 1) {
+	        	    		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+	        	    		sharingIntent.setType("text/plain");
+	        	    		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, description);
+	        	    		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
+	        	    		startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
+	        	    	}
+	        	    }
+        		}
+        		BookmarkClick bookmarkClick = new BookmarkClick();
+        		bookmarkClick.view = view;
+        		builder.setTitle(getString(R.string.choose_action));
+        		builder.setItems(options, bookmarkClick);
+
+    	        AlertDialog actionChooser = builder.create();
+    	        actionChooser.show();
         	}
         });
 	}

@@ -44,5 +44,9 @@
     <string-array name="pref_accept_all_SSL_certs_labels">
         <item>No</item><item>Yes</item>
     </string-array>
+    <string name="open">Open</string>
+    <string name="share">Share</string>
+    <string name="share_via">Share via</string>
+    <string name="choose_action">Choose an action</string>
         
 </resources>
