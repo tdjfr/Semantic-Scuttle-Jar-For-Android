@@ -1,20 +1,16 @@
 package uk.co.jarofgreen.semanticscuttlejar;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.SocketTimeoutException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import org.xml.sax.helpers.DefaultHandler;
 
 import uk.co.jarofgreen.semanticscuttlejar.R;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -24,9 +20,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class ScuttleAddBookmark extends Activity {
-	private String scuttleUsername;
-	private String scuttlePassword;
-	private String scuttleURL;
 
 	private class SaveBookmark extends AsyncTask<String, Void, Boolean> {
 		private String errorMsg = "";
@@ -49,34 +42,23 @@ public class ScuttleAddBookmark extends Activity {
 			String tags = args[2];
 			String status = args[3];
 			try {
-		        String apiURL = "api/posts_add.php?url="+URLEncoder.encode(url, "UTF-8")+
-		        	"&description="+URLEncoder.encode(desc, "UTF-8")+
-		        	"&tags="+URLEncoder.encode(tags, "UTF-8")+
-		        	"&status="+URLEncoder.encode(status, "UTF-8");
-		        InputStream is = APICall.callScuttleURL(apiURL, ScuttleAddBookmark.this);
-			} catch( SocketTimeoutException ste ) {
-				this.errorMsg = "Username and/or password is incorrect.";
-				return(false);
-			} catch( FileNotFoundException fnfe ) {
-				this.errorMsg = "Unable to load URL.  Please check your URL in the Settings.";
-				return(false);
-			} catch( IOException ioe ) {
-				this.errorMsg = "ioe:"+ioe.getMessage();
-		    	return(false);
-			} catch( Exception e ) {
+				DefaultHandler handler = new ScuttleAddXMLHandler();
+				String apiURL = "api/posts_add.php?url="+URLEncoder.encode(url, "UTF-8")+
+					"&description="+URLEncoder.encode(desc, "UTF-8")+
+					"&tags="+URLEncoder.encode(tags, "UTF-8")+
+					"&status="+URLEncoder.encode(status, "UTF-8");
+				handler = APICall.parseScuttleURL(apiURL, ScuttleAddBookmark.this, handler);
+			} catch( ScuttleAPIException sae ) {
+				this.errorMsg = sae.getMessage();
+				return false;
+			} catch (UnsupportedEncodingException e) {
 				this.errorMsg = "e:"+e.getMessage();
-		    	return(false);
-		    }
-			return(true);
+				return false;
+			}
+			return true;
 		}
 	}
 
-	private void getPrefs() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
-		this.scuttleURL = prefs.getString("url", "");
-		this.scuttleUsername = prefs.getString("username", "");
-		this.scuttlePassword = prefs.getString("password", "");
-	}
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +84,6 @@ public class ScuttleAddBookmark extends Activity {
         Button btnSave = (Button)findViewById(R.id.addbookmark_btnsave);
         btnSave.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		getPrefs();
                 String strTags = ((EditText)findViewById(R.id.addbookmark_tags)).getText().toString();
                 String strUrl = ((EditText)findViewById(R.id.addbookmark_url)).getText().toString();
                 String strDesc = ((EditText)findViewById(R.id.addbookmark_description)).getText().toString();
