@@ -1,13 +1,5 @@
 package uk.co.jarofgreen.semanticscuttlejar;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Authenticator;
-import java.net.HttpURLConnection;
-import java.net.PasswordAuthentication;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -25,7 +17,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,17 +27,18 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.xml.sax.helpers.DefaultHandler;
 
 
 public class ScuttleBookmarkList extends ListActivity {
-	private String scuttleUsername;
-	private String scuttlePassword;
-	private String scuttleURL;
 	private String filterTag;
 	
-	private class RetrieveTags extends AsyncTask<String, Void, List<HashMap<String, String>>> {
-		private AlertDialog alertLoading;
-		private String errorMsg = "";
+	private abstract class BackgroundTask extends AsyncTask<String, Void, List<HashMap<String, String>>> {
+		protected AlertDialog alertLoading;
+		protected String errorMsg = "";
+	}
+
+	private class RetrieveTags extends BackgroundTask {
 
 		protected void onPreExecute() {
 	        AlertDialog.Builder builder = new AlertDialog.Builder(ScuttleBookmarkList.this);
@@ -65,28 +57,16 @@ public class ScuttleBookmarkList extends ListActivity {
 		}
 		protected List<HashMap<String, String>> doInBackground(String... args) {
 			try {
-		        InputStream is = APICall.callScuttleURL("api/tags_get.php", ScuttleBookmarkList.this);
-		        ScuttleTagXMLHandler handler = new ScuttleTagXMLHandler();
-		        Xml.parse(is, Xml.Encoding.ISO_8859_1, handler);
-		        return(handler.getTags());
-			} catch( SocketTimeoutException ste ) {
-				this.errorMsg = "Username and/or password is incorrect.";
-				return(null);
-			} catch( FileNotFoundException fnfe ) {
-				this.errorMsg = "Unable to load URL.  Please check your URL in the Settings.";
-				return(null);
-			} catch( IOException ioe ) {
-				this.errorMsg = "ioe:"+ioe.getMessage();
-		    	return(null);
-			} catch( Exception e ) {
-				this.errorMsg = "e:"+e.getMessage();
-		    	return(null);
-		    }
+				DefaultHandler handler = new ScuttleTagXMLHandler();
+				handler = APICall.parseScuttleURL("api/tags_get.php", ScuttleBookmarkList.this, handler);
+				return(((ScuttleTagXMLHandler) handler).getTags());
+			} catch( ScuttleAPIException sae ) {
+				this.errorMsg = sae.getMessage();
+				return null;
+			}
 		}
 	}
-	private class RetrieveBookmarks extends AsyncTask<String, Void, List<HashMap<String, String>>> {
-		private AlertDialog alertLoading;
-		private String errorMsg = "";
+	private class RetrieveBookmarks extends BackgroundTask {
 		
 		protected void onPreExecute() {
 	        AlertDialog.Builder builder = new AlertDialog.Builder(ScuttleBookmarkList.this);
@@ -105,38 +85,22 @@ public class ScuttleBookmarkList extends ListActivity {
 		}
 		protected List<HashMap<String, String>> doInBackground(String... args) {
 			try {
-		        String url = "api/posts_all.php";
-		        // If a valid tag has been specified by the user then we only 
-		        // get bookmarks with that tag.
-		        if( filterTag != null && !filterTag.equals("") && !filterTag.equals(getResources().getString(R.string.tagslist_notags)) ) {
-		        	url += "?tag="+filterTag;
-		        }
-		        InputStream is = APICall.callScuttleURL(url, ScuttleBookmarkList.this);
-		        ScuttleBookmarkXMLHandler handler = new ScuttleBookmarkXMLHandler();
-		        Xml.parse(is, Xml.Encoding.ISO_8859_1, handler);
-		        return(handler.getBookmarks());
-			} catch( SocketTimeoutException ste ) {
-				this.errorMsg = "Username and/or password is incorrect.";
-				return(null);
-			} catch( FileNotFoundException fnfe ) {
-				this.errorMsg = "Unable to load URL.  Please check your URL in the Settings.";
-				return(null);
-			} catch( IOException ioe ) {
-				this.errorMsg = "ioe:"+ioe.getMessage();
-		    	return(null);
-			} catch( Exception e ) {
-				this.errorMsg = "e:"+e.getMessage();
-		    	return(null);
-		    }
+				String url = "api/posts_all.php";
+				// If a valid tag has been specified by the user then we only 
+				// get bookmarks with that tag.
+				if( filterTag != null && !filterTag.equals("") && !filterTag.equals(getResources().getString(R.string.tagslist_notags)) ) {
+					url += "?tag="+filterTag;
+				}
+				DefaultHandler handler = new ScuttleBookmarkXMLHandler();
+				handler = APICall.parseScuttleURL(url, ScuttleBookmarkList.this, handler);
+				return (((ScuttleBookmarkXMLHandler) handler).getBookmarks());
+			} catch( ScuttleAPIException sae ) {
+				this.errorMsg = sae.getMessage();
+				return null;
+			}
 		}
 	}
 
-	private void getPrefs() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
-		this.scuttleURL = prefs.getString("url", "");
-		this.scuttleUsername = prefs.getString("username", "");
-		this.scuttlePassword = prefs.getString("password", "");
-	}
 	private void loadBookmarks() {
 		(new RetrieveBookmarks()).execute();
 	}
@@ -157,7 +121,7 @@ public class ScuttleBookmarkList extends ListActivity {
 		});
 		// Add an item at the beginning of the list that will show all bookmarks.
 		HashMap<String, String> notags = new HashMap<String, String>();
-		notags.put("tag", getResources().getString(R.string.tagslist_notags));
+		notags.put("tag", getString(R.string.tagslist_notags));
 		tags.add(0, notags);
 		// Create the list in the ListView from the tags.
     	SimpleAdapter adapter = new SimpleAdapter(this, 
@@ -220,19 +184,19 @@ public class ScuttleBookmarkList extends ListActivity {
         	}
         });
 	}
-    /** Called when the activity is first created. */
-    @Override
+	/** Called when the activity is first created. */
+	@Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        getPrefs();
-        
-        if( this.scuttleURL.equals("") ) {
-    		startActivity(new Intent(this, ScuttlePreferences.class));
-        }
-        else {
-        	this.loadBookmarks();
-        }
+		super.onCreate(savedInstanceState);
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
+		String scuttleURL = prefs.getString("url", "");
+		if ( scuttleURL.equals("") ) {
+			startActivity(new Intent(this, ScuttlePreferences.class));
+		}
+		else {
+			this.loadBookmarks();
+		}
     }
     
     @Override
@@ -251,14 +215,13 @@ public class ScuttleBookmarkList extends ListActivity {
     		startActivity(new Intent(this, ScuttleAddBookmark.class));
     		return(true);    		
     	case R.id.listmenu_refresh:
-    		this.getPrefs();
     		this.loadBookmarks();
     		return(true);
     	case R.id.listmenu_tags:
-    		this.getPrefs();
     		this.loadTags();
     		return(true);
     	}
     	return(super.onOptionsItemSelected(item));
     }
+
 }
