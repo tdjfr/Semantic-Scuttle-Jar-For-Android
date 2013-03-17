@@ -50,10 +50,9 @@ public class APICall  {
 		HttpURLConnection c = (HttpURLConnection)(new URL(scuttleURL+url).openConnection());
 		c.setRequestProperty("Authorization", "Basic "+encodedAuthentication);
 		c.setUseCaches(false);
-		c.setConnectTimeout(1500);
-		c.setReadTimeout(300);
-        
-        
+		c.setConnectTimeout(2000);
+		c.setReadTimeout(2000);
+
 		if (acceptAllSSLCerts.compareTo("yes") == 0) {
 			try {
 				TrustModifier.relaxHostChecking(c);
