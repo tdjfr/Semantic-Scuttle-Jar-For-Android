@@ -3,9 +3,7 @@ package uk.co.jarofgreen.semanticscuttlejar;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
-import java.net.PasswordAuthentication;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -16,6 +14,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Xml;
+import android.util.Base64;
 
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -39,40 +38,43 @@ public class APICall  {
 			if (http.compareTo("http://") != 0 && https.compareTo("https://") != 0) {
 				scuttleURL = "http://"+scuttleURL;
 			}
-			
 		}
 		
 		String scuttleUsername = prefs.getString("username", "");
-		
 		String scuttlePassword = prefs.getString("password", "");
-		
 		String acceptAllSSLCerts = prefs.getString("acceptAllSSLCerts", "no");
 		
-        Authenticator.setDefault(new ScuttleAuthenticator(scuttleUsername, scuttlePassword));
-        HttpURLConnection c = (HttpURLConnection)(new URL(scuttleURL+url).openConnection());
-        c.setUseCaches(false);
-        c.setConnectTimeout(1500);
-        c.setReadTimeout(300);
+		String authentication = scuttleUsername+":"+scuttlePassword;
+		String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+
+		HttpURLConnection c = (HttpURLConnection)(new URL(scuttleURL+url).openConnection());
+		c.setRequestProperty("Authorization", "Basic "+encodedAuthentication);
+		c.setUseCaches(false);
+		c.setConnectTimeout(1500);
+		c.setReadTimeout(300);
         
         
-        if (acceptAllSSLCerts.compareTo("yes") == 0) {
-	        try {
-	        	TrustModifier.relaxHostChecking(c);
-	        } catch (KeyStoreException e) {
-	        	// 
-	        } catch (KeyManagementException e) {
-	        	//
-	        } catch (NoSuchAlgorithmException e) {
-	        	//
-	        }
-        }
+		if (acceptAllSSLCerts.compareTo("yes") == 0) {
+			try {
+				TrustModifier.relaxHostChecking(c);
+			} catch (KeyStoreException e) {
+				//
+			} catch (KeyManagementException e) {
+				//
+			} catch (NoSuchAlgorithmException e) {
+				//
+			}
+		}
 		c.connect();
-		return(c);
+		return c;
 	}
 
 	static DefaultHandler parseScuttleURL(String url, Context context, DefaultHandler handler) throws ScuttleAPIException {
 		try {
 			HttpURLConnection c = APICall.callScuttleURL(url, context);
+			if (c.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+				throw new ScuttleAPIException("Username and/or password is incorrect.");
+			}
 			InputStream is = c.getInputStream();
 			String charset = APICall.getConnectionCharset(c);
 			Xml.Encoding parse_encoding = Xml.Encoding.ISO_8859_1;
@@ -81,8 +83,11 @@ public class APICall  {
 			}
 			Xml.parse(is, parse_encoding, handler);
 		}
+		catch( ScuttleAPIException sae ) {
+			throw sae;
+		}
 		catch( SocketTimeoutException ste ) {
-			throw new ScuttleAPIException("Username and/or password is incorrect.");
+			throw new ScuttleAPIException("The server was too long to answer.");
 		} catch( FileNotFoundException fnfe ) {
 			throw new ScuttleAPIException("Unable to load URL.  Please check your URL in the Settings.");
 		} catch( IOException ioe ) {
@@ -91,18 +96,6 @@ public class APICall  {
 			throw new ScuttleAPIException("e:"+e.getMessage());
 		}
 		return handler;
-	}
-
-	static class ScuttleAuthenticator extends Authenticator {
-		private String username, password;
-		
-		public ScuttleAuthenticator(String user, String pass) {
-			this.username = user;
-			this.password = pass;
-		}
-		protected PasswordAuthentication getPasswordAuthentication() {
-			return( new PasswordAuthentication(this.username, this.password.toCharArray()) );
-		}
 	}
 
 	static String getConnectionCharset(HttpURLConnection connection) {
