@@ -9,6 +9,7 @@
        		android:layout_height="wrap_content"/>
 		<EditText
 			android:id="@+id/addbookmark_url"
+			android:inputType="textUri"
        		android:singleLine="true"
        		android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
@@ -18,15 +19,17 @@
        		android:layout_height="wrap_content"/>
 		<EditText
 			android:id="@+id/addbookmark_description"
-       		android:singleLine="true"
-       		android:layout_width="fill_parent"
-       		android:layout_height="wrap_content"/>
+			android:singleLine="false"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:inputType="text|textMultiLine" />
 		<TextView
 			android:text="@string/addbookmark_tags_label"
 			android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
 		<EditText
 			android:id="@+id/addbookmark_tags"
+			android:inputType="text|textNoSuggestions"
        		android:singleLine="true"
        		android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
