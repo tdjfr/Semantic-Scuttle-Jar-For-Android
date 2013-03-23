@@ -42,7 +42,7 @@ public class ScuttleBookmarkList extends ListActivity {
 
 		protected void onPreExecute() {
 	        AlertDialog.Builder builder = new AlertDialog.Builder(ScuttleBookmarkList.this);
-	        builder.setMessage("Loading tags...");
+	        builder.setMessage(getString(R.string.tagslist_loading));
 	        alertLoading = builder.create();
 	        alertLoading.show();
 		}
@@ -70,7 +70,7 @@ public class ScuttleBookmarkList extends ListActivity {
 		
 		protected void onPreExecute() {
 	        AlertDialog.Builder builder = new AlertDialog.Builder(ScuttleBookmarkList.this);
-	        builder.setMessage("Loading bookmarks...");
+	        builder.setMessage(getString(R.string.postlist_loading));
 	        alertLoading = builder.create();
 	        alertLoading.show();
 		}
@@ -111,7 +111,7 @@ public class ScuttleBookmarkList extends ListActivity {
 		// Create the dialog.
 		final Dialog dlgTagList = new Dialog(this);
 		dlgTagList.setContentView(R.layout.dialog_taglist);
-		dlgTagList.setTitle("Tag List");
+		dlgTagList.setTitle(getString(R.string.tagslist_title));
 		dlgTagList.setCancelable(true);
 		// Sort the tags alphabetically.
 		Collections.sort(tags, new Comparator<HashMap<String, String>>() {

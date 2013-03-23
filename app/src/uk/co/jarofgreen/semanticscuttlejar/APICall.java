@@ -72,7 +72,7 @@ public class APICall  {
 		try {
 			HttpURLConnection c = APICall.callScuttleURL(url, context);
 			if (c.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				throw new ScuttleAPIException("Username and/or password is incorrect.");
+				throw new ScuttleAPIException(context.getString(R.string.error_authentication));
 			}
 			InputStream is = c.getInputStream();
 			String charset = APICall.getConnectionCharset(c);
@@ -86,9 +86,9 @@ public class APICall  {
 			throw sae;
 		}
 		catch( SocketTimeoutException ste ) {
-			throw new ScuttleAPIException("The server was too long to answer.");
+			throw new ScuttleAPIException(context.getString(R.string.error_timeout));
 		} catch( FileNotFoundException fnfe ) {
-			throw new ScuttleAPIException("Unable to load URL.  Please check your URL in the Settings.");
+			throw new ScuttleAPIException(context.getString(R.string.error_filenotfound));
 		} catch( IOException ioe ) {
 			throw new ScuttleAPIException("ioe:"+ioe.getMessage());
 		} catch( Exception e ) {

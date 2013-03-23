@@ -35,8 +35,13 @@
 		<item>Shared with Watched List</item>
 		<item>Private</item>
 	</string-array>
+	<string name="addbookmark_saved">Bookmark saved</string>
 
+	<string name="tagslist_title">Tag List</string>
 	<string name="tagslist_notags">No Tag (show all bookmarks)</string>
+	<string name="tagslist_loading">Loading tags…</string>
+	
+	<string name="postlist_loading">Loading bookmarks…</string>
 	
     <string-array name="pref_accept_all_SSL_certs_values">
         <item>no</item><item>yes</item>
@@ -44,9 +49,16 @@
     <string-array name="pref_accept_all_SSL_certs_labels">
         <item>No</item><item>Yes</item>
     </string-array>
+    
     <string name="open">Open</string>
     <string name="share">Share</string>
     <string name="share_via">Share via</string>
     <string name="choose_action">Choose an action</string>
-        
+    
+    <string name="error_authentication">Username and/or password is incorrect.</string>
+    <string name="error_timeout">The server was too long to answer.</string>
+    <string name="error_filenotfound">Unable to load URL.  Please check your URL in the Settings.</string>
+    <string name="error_urlrequired">URL is required</string>
+    <string name="error_descrequired">Description is required</string>
+    <string name="error_saving">Error saving bookmark:</string>
 </resources>

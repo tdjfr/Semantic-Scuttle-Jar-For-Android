@@ -29,10 +29,10 @@ public class ScuttleAddBookmark extends Activity {
 		protected void onPostExecute(Boolean success) {
 			String msg = "";
 			if( success == false ) {
-				msg = "Error saving bookmark: " + this.errorMsg;
+				msg = getString(R.string.error_saving) + " " + this.errorMsg;
 			}
 			else {
-				msg = "Bookmark saved";
+				msg = getString(R.string.addbookmark_saved);
 			}
 			Toast.makeText(ScuttleAddBookmark.this, msg, Toast.LENGTH_SHORT).show();
 		}
@@ -91,11 +91,11 @@ public class ScuttleAddBookmark extends Activity {
 				String strTags = ((EditText)findViewById(R.id.addbookmark_tags)).getText().toString();
 				String strStatus = ((String)((Spinner)findViewById(R.id.addbookmark_status)).getSelectedItem());
 				
-				if (strUrl.trim().equals("")) { 
-					fieldUrl.setError("URL is required");
+				if (strUrl.trim().equals("")) {
+					fieldUrl.setError(getString(R.string.error_urlrequired));
 				}
-				if (strDesc.trim().equals("")) { 
-					fieldDesc.setError("Description is required");
+				if (strDesc.trim().equals("")) {
+					fieldDesc.setError(getString(R.string.error_descrequired));
 				}
 				else {
 					(new SaveBookmark()).execute(strUrl, strDesc, strTags, strStatus);
