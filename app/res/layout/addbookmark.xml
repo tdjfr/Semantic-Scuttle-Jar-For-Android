@@ -3,39 +3,34 @@
    	android:layout_width="fill_parent"
    	android:layout_height="fill_parent" 
    	android:orientation="vertical">
-
-
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		<TextView
 			android:text="@string/addbookmark_url_label"
 			android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
-		<EditText 
+		<EditText
 			android:id="@+id/addbookmark_url"
        		android:singleLine="true"
        		android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
-
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		<TextView
 			android:text="@string/addbookmark_description_label"
 			android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
-		<EditText 
+		<EditText
 			android:id="@+id/addbookmark_description"
        		android:singleLine="true"
        		android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
-
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		<TextView
 			android:text="@string/addbookmark_tags_label"
 			android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
-		<EditText 
+		<EditText
 			android:id="@+id/addbookmark_tags"
        		android:singleLine="true"
        		android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
-
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		<TextView
 			android:text="@string/addbookmark_status_label"
 			android:layout_width="fill_parent"
        		android:layout_height="wrap_content"/>
@@ -44,13 +39,10 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:prompt="@string/addbookmark_status_prompt"/>
-	
-
-		<Button xmlns:android="http://schemas.android.com/apk/res/android"
+		<Button
 	        android:id="@+id/addbookmark_btnsave"
 	        android:text="@string/addbookmark_savebutton_label"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"/>
-
 </LinearLayout>
 	
