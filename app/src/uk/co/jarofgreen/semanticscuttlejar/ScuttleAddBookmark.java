@@ -29,7 +29,7 @@ public class ScuttleAddBookmark extends Activity {
 		protected void onPostExecute(Boolean success) {
 			String msg = "";
 			if( success == false ) {
-		        msg = "Error saving bookmark: " + this.errorMsg;
+				msg = "Error saving bookmark: " + this.errorMsg;
 			}
 			else {
 				msg = "Bookmark saved";
@@ -59,38 +59,49 @@ public class ScuttleAddBookmark extends Activity {
 		}
 	}
 
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.addbookmark);
-
-        // Setup the Privacy (status) spinner.
-        Spinner spinner = (Spinner) findViewById(R.id.addbookmark_status);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.status_options, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        // Get the extras data passed in with the intent.
-        Bundle b = this.getIntent().getExtras();
-        if (b != null) {
-	        // Set the text fields to the values of the passed in data.
-	        EditText txtUrl = (EditText)findViewById(R.id.addbookmark_url);
-	        txtUrl.setText(b.getCharSequence(Intent.EXTRA_TEXT));
-	        EditText txtDesc = (EditText)findViewById(R.id.addbookmark_description);
-	        txtDesc.setText(b.getString(Intent.EXTRA_SUBJECT));
-        }
-        // Handle when the user presses the save button.
-        Button btnSave = (Button)findViewById(R.id.addbookmark_btnsave);
-        btnSave.setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
-                String strTags = ((EditText)findViewById(R.id.addbookmark_tags)).getText().toString();
-                String strUrl = ((EditText)findViewById(R.id.addbookmark_url)).getText().toString();
-                String strDesc = ((EditText)findViewById(R.id.addbookmark_description)).getText().toString();
-                String strStatus = ((String)((Spinner)findViewById(R.id.addbookmark_status)).getSelectedItem());
-        		(new SaveBookmark()).execute(strUrl, strDesc, strTags, strStatus);
-        		finish();
-        	}
-        });
-    }
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.addbookmark);
+		
+		// Setup the Privacy (status) spinner.
+		Spinner spinner = (Spinner) findViewById(R.id.addbookmark_status);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.status_options, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+		
+		// Get the extras data passed in with the intent.
+		Bundle b = this.getIntent().getExtras();
+		if (b != null) {
+			// Set the text fields to the values of the passed in data.
+			EditText txtUrl = (EditText)findViewById(R.id.addbookmark_url);
+			txtUrl.setText(b.getCharSequence(Intent.EXTRA_TEXT));
+			EditText txtDesc = (EditText)findViewById(R.id.addbookmark_description);
+			txtDesc.setText(b.getString(Intent.EXTRA_SUBJECT));
+		}
+		// Handle when the user presses the save button.
+		Button btnSave = (Button)findViewById(R.id.addbookmark_btnsave);
+		btnSave.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				EditText fieldUrl = (EditText)findViewById(R.id.addbookmark_url);
+				String strUrl = fieldUrl.getText().toString();
+				EditText fieldDesc = (EditText)findViewById(R.id.addbookmark_description); 
+				String strDesc = fieldDesc.getText().toString();
+				String strTags = ((EditText)findViewById(R.id.addbookmark_tags)).getText().toString();
+				String strStatus = ((String)((Spinner)findViewById(R.id.addbookmark_status)).getSelectedItem());
+				
+				if (strUrl.trim().equals("")) { 
+					fieldUrl.setError("URL is required");
+				}
+				if (strDesc.trim().equals("")) { 
+					fieldDesc.setError("Description is required");
+				}
+				else {
+					(new SaveBookmark()).execute(strUrl, strDesc, strTags, strStatus);
+					finish();
+				}
+			}
+		});
+	}
 }
