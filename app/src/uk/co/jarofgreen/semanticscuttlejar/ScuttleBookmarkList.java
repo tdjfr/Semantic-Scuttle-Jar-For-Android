@@ -173,8 +173,13 @@ public class ScuttleBookmarkList extends ListActivity {
         			new String[] { "description", "href" }, 
         			new int[] { R.id.bookmark_description, R.id.bookmark_url });
         setListAdapter(adapter);
-        
         ListView lv = getListView();
+        
+    	TextSearch textsearch = new TextSearch();
+    	textsearch.setAdapter(adapter);
+    	EditText searchbox = (EditText) findViewById(R.id.searchbox);
+    	searchbox.addTextChangedListener(textsearch);
+        
         lv.setOnItemClickListener(new OnItemClickListener() {
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         		AlertDialog.Builder builder = new AlertDialog.Builder(ScuttleBookmarkList.this);
@@ -213,6 +218,8 @@ public class ScuttleBookmarkList extends ListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.main);
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
 		String scuttleURL = prefs.getString("url", "");
