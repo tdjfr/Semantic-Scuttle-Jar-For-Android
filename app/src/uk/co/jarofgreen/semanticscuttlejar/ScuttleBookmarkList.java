@@ -17,12 +17,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -100,6 +104,20 @@ public class ScuttleBookmarkList extends ListActivity {
 			}
 		}
 	}
+	
+	final class TextSearch implements TextWatcher {
+		public Filterable adapter;
+	    public void afterTextChanged(Editable s) {
+	    }
+	    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+	    }
+	    public void onTextChanged(CharSequence s, int start, int before, int count) {
+	        this.adapter.getFilter().filter(s);
+	    }
+	    public void setAdapter(Filterable adapter) {
+	    	this.adapter = adapter;
+	    }
+	}
 
 	private void loadBookmarks() {
 		(new RetrieveBookmarks()).execute();
@@ -129,6 +147,13 @@ public class ScuttleBookmarkList extends ListActivity {
     			R.layout.tag_list_item,
     			new String[] { "tag" }, 
     			new int[] { R.id.taglist_tag });
+
+		// Add search capability on ListView
+		TextSearch textsearch = new TextSearch();
+		textsearch.setAdapter(adapter);
+		EditText searchbox = (EditText) dlgTagList.findViewById(R.id.searchbox);
+		searchbox.addTextChangedListener(textsearch);
+    	
 		ListView lv = (ListView)dlgTagList.findViewById(R.id.listview_tags);
 		lv.setAdapter(adapter);
 		lv.setOnItemClickListener(new OnItemClickListener() {

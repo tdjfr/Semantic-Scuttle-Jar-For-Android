@@ -54,6 +54,7 @@
     <string name="share">Share</string>
     <string name="share_via">Share via</string>
     <string name="choose_action">Choose an action</string>
+    <string name="search">Search</string>
     
     <string name="error_authentication">Username and/or password is incorrect.</string>
     <string name="error_timeout">The server was too long to answer.</string>
