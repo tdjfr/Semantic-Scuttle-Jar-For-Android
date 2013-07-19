@@ -51,6 +51,7 @@
     
     <string name="open">Open</string>
     <string name="share">Share</string>
+    <string name="delete">Delete</string>
     <string name="share_via">Share via</string>
     <string name="choose_action">Choose an action</string>
     
