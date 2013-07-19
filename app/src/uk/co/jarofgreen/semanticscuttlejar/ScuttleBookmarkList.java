@@ -102,9 +102,52 @@ public class ScuttleBookmarkList extends ListActivity {
 		}
 	}
 
+    private class DeleteBookmarks extends AsyncTask<String, Void, Boolean> {
+
+        private AlertDialog alertLoading;
+        private String errorMsg = ""; 
+
+        protected void onPreExecute() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ScuttleBookmarkList.this);
+            builder.setMessage(getString(R.string.delbookmark_title));
+            alertLoading = builder.create();
+            alertLoading.show();
+        }   
+
+        protected void onPostExecute(Boolean success) {
+            String msg="";
+            alertLoading.dismiss();
+            if( success == false ) { 
+                msg = getString(R.string.error_saving) + " " + this.errorMsg;
+            }   
+            else {
+                msg = getString(R.string.addbookmark_saved);
+            }   
+            Toast.makeText(ScuttleBookmarkList.this, msg, Toast.LENGTH_SHORT).show();
+        }   
+
+        protected Boolean doInBackground(String... urls) {
+            try {
+                DefaultHandler handler = new ScuttleAddXMLHandler();
+                handler = APICall.parseScuttleURL("api/posts_delete.php?url="+URLEncoder.encode(urls[0],"UTF-8"), ScuttleBookmarkList.this,handler);
+            } catch( ScuttleAPIException sae ) { 
+                    this.errorMsg = sae.getMessage();
+                    return false;
+            } catch (Exception e) {
+                    this.errorMsg = "e:"+e.getMessage();
+                    return false;
+            }   
+            return true;
+        }   
+    }
+
+
 	private void loadBookmarks() {
 		(new RetrieveBookmarks()).execute();
 	}
+    private void deleteBookmarks(String url) {
+        (new DeleteBookmarks()).execute(url);
+    }
 	private void loadTags() {
 		(new RetrieveTags()).execute();
 	}
