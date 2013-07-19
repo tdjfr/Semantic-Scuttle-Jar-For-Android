@@ -224,6 +224,7 @@ public class ScuttleBookmarkList extends ListActivity {
                             dialogDelete.setCancelable(false);
                             dialogDelete.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.delbookmark_yes), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int buttonId) {
+                                    deleteBookmarks(url);
                                 }
                             });
                             dialogDelete.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.delbookmark_no), new DialogInterface.OnClickListener() {
