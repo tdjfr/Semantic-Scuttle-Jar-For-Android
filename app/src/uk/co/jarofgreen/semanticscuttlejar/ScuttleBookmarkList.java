@@ -121,7 +121,7 @@ public class ScuttleBookmarkList extends ListActivity {
                 msg = getString(R.string.error_saving) + " " + this.errorMsg;
             }   
             else {
-                msg = getString(R.string.addbookmark_saved);
+                msg = getString(R.string.delbookmark_deleted);
             }   
             Toast.makeText(ScuttleBookmarkList.this, msg, Toast.LENGTH_SHORT).show();
         }   

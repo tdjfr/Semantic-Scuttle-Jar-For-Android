@@ -59,6 +59,7 @@
     <string name="delbookmark_msg">Choose Yes or No</string>
     <string name="delbookmark_yes">Yes</string>
     <string name="delbookmark_no">No</string>
+    <string name="delbookmark_deleted">bookmark deleted</string>
 
     <string name="error_authentication">Username and/or password is incorrect.</string>
     <string name="error_timeout">The server was too long to answer.</string>
