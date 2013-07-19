@@ -153,7 +153,7 @@ public class ScuttleBookmarkList extends ListActivity {
         lv.setOnItemClickListener(new OnItemClickListener() {
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         		AlertDialog.Builder builder = new AlertDialog.Builder(ScuttleBookmarkList.this);
-        		String[] options = {getString(R.string.open), getString(R.string.share)};
+        		String[] options = {getString(R.string.open), getString(R.string.share), getString(R.string.delete)};
         		final class BookmarkClick implements DialogInterface.OnClickListener {
         			
         			View view;
@@ -171,6 +171,23 @@ public class ScuttleBookmarkList extends ListActivity {
 	        	    		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, description);
 	        	    		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
 	        	    		startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
+	        	    	}
+                        // Delete URL
+	        	    	if (which == 2) {
+                            AlertDialog dialogDelete = new AlertDialog.Builder(ScuttleBookmarkList.this).create();
+                            dialogDelete.setTitle(getString(R.string.delbookmark_title));
+                            dialogDelete.setMessage(getString(R.string.delbookmark_msg));
+                            dialogDelete.setCancelable(false);
+                            dialogDelete.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.delbookmark_yes), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int buttonId) {
+                                }
+                            });
+                            dialogDelete.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.delbookmark_no), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int buttonId) {
+                                }
+                            });
+                            dialogDelete.setIcon(android.R.drawable.ic_dialog_alert);
+                            dialogDelete.show();
 	        	    	}
 	        	    }
         		}
