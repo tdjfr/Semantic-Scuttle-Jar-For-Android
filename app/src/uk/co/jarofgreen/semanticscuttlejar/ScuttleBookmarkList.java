@@ -28,6 +28,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.xml.sax.helpers.DefaultHandler;
+import java.net.URLEncoder;
 
 
 public class ScuttleBookmarkList extends ListActivity {
@@ -159,7 +160,7 @@ public class ScuttleBookmarkList extends ListActivity {
         			View view;
         			
         			public void onClick(DialogInterface dialog, int which) {
-        				String url = ((TextView)view.findViewById(R.id.bookmark_url)).getText().toString();
+        				final String url = ((TextView)view.findViewById(R.id.bookmark_url)).getText().toString();
         	    		String description = ((TextView)view.findViewById(R.id.bookmark_description)).getText().toString();
         				if (which == 0) {
 	        	    		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
