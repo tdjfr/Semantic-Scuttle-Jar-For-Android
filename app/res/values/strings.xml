@@ -56,7 +56,6 @@
     <string name="choose_action">Choose an action</string>
     
     <string name="delbookmark_title">Delete bookmark</string>
-    <string name="delbookmark_msg">Choose Yes or No</string>
     <string name="delbookmark_yes">Yes</string>
     <string name="delbookmark_no">No</string>
     <string name="delbookmark_deleted">bookmark deleted</string>

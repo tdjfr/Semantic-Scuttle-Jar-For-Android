@@ -220,7 +220,7 @@ public class ScuttleBookmarkList extends ListActivity {
 	        	    	if (which == 2) {
                             AlertDialog dialogDelete = new AlertDialog.Builder(ScuttleBookmarkList.this).create();
                             dialogDelete.setTitle(getString(R.string.delbookmark_title));
-                            dialogDelete.setMessage(getString(R.string.delbookmark_msg));
+                            dialogDelete.setMessage(url);
                             dialogDelete.setCancelable(false);
                             dialogDelete.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.delbookmark_yes), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int buttonId) {
