@@ -23,6 +23,7 @@ public class ScuttleBookmarkXMLHandler extends DefaultHandler {
 			curBookmark.put("hash", attributes.getValue("hash"));
 			curBookmark.put("tag", attributes.getValue("tag"));
 			curBookmark.put("time", attributes.getValue("time"));
+			curBookmark.put("status", attributes.getValue("status"));
 			this.bookmarks.add(curBookmark);
 		}
 	}
