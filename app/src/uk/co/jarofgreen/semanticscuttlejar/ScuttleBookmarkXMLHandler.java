@@ -3,6 +3,7 @@ package uk.co.jarofgreen.semanticscuttlejar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.lang.Integer;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -19,7 +20,7 @@ public class ScuttleBookmarkXMLHandler extends DefaultHandler {
 		if( localName.equalsIgnoreCase("post") ) {
 			HashMap<String, String> curBookmark = new HashMap<String, String>();
 			curBookmark.put("href", attributes.getValue("href"));
-            if (attributes.getValue("status") == 2)
+            if (Integer.valueOf(attributes.getValue("status")) == 2)
                 curBookmark.put("description", "P / "+attributes.getValue("description"));
             else
 			    curBookmark.put("description", attributes.getValue("description"));
