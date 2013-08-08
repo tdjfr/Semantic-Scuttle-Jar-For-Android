@@ -19,7 +19,10 @@ public class ScuttleBookmarkXMLHandler extends DefaultHandler {
 		if( localName.equalsIgnoreCase("post") ) {
 			HashMap<String, String> curBookmark = new HashMap<String, String>();
 			curBookmark.put("href", attributes.getValue("href"));
-			curBookmark.put("description", attributes.getValue("description"));
+            if (attributes.getValue("status") == 2)
+                curBookmark.put("description", "P / "+attributes.getValue("description"));
+            else
+			    curBookmark.put("description", attributes.getValue("description"));
 			curBookmark.put("hash", attributes.getValue("hash"));
 			curBookmark.put("tag", attributes.getValue("tag"));
 			curBookmark.put("time", attributes.getValue("time"));
